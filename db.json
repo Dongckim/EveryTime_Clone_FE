@@ -1,0 +1,27 @@
+{
+  "signup": [
+    {
+      "loginId": "id011111",
+      "userName": "nameee",
+      "password": "password11@",
+      "email": "aaaqwe@qwe.com",
+      "secretKey": "ABCDE"
+    },
+    {
+      "loginId": "aaaa",
+      "userName": "",
+      "password": "a",
+      "email": "a",
+      "secretKey": "a",
+      "id": 0.6244748374994502,
+      "confirmPassword": "a",
+      "nickname": "a"
+    }
+  ],
+  "login": [
+    {
+      "loginId": "id011111",
+      "password": "password11@"
+    }
+  ]
+}
