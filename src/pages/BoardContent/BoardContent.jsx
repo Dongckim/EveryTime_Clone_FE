@@ -1,11 +1,18 @@
 import styled from "styled-components";
 import { AiOutlineArrowLeft } from 'react-icons/ai'
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Profile from "../../core/Profile";
+import { useQuery } from "react-query";
+import { getDashBoard } from "../../api/DashBoard";
 
 const BoardContent = () => {
     const navigator = useNavigate();
-
+    const param = useParams();
+    console.log('파람',param)
+    const { isLoading, data, isError } = useQuery('getMain',getDashBoard,{
+        refetchOnWindowFocus: false
+    })
+    console.log(data)
     return (
         <div>
             <Headerdiv>
@@ -31,7 +38,11 @@ const BoardContent = () => {
                 <CommWrapper>
                     코멘트 창
                 </CommWrapper>
-                <replyInput/>
+                <form>
+                   <ReplyInput
+                   placeholder="댓글을 입력하세요"
+                   /> 
+                </form>
             </div>
         </div>
     )
@@ -100,8 +111,15 @@ const CommWrapper = styled.div`
     height: 100px;
     overflow: scroll;
 `
-const replyInput = styled.input`
+const ReplyInput = styled.input`
     position: absolute;
     background-color: white;
-    top: 300px;
+    top: 740px;
+    left: 30px;
+    width: 310px;
+    height: 40px;
+    border-radius: 30px;
+    background-color:#373737;
+    text-indent:1em;
+    border: none;
 `

@@ -8,6 +8,7 @@ const Main = () => {
     const { isLoading, isError, data } = useQuery('getMain',getMain,{
         refetchOnWindowFocus:false
     })
+    console.log(data)
     return (
         <div style={{marginTop:'0px',color:'#ffffff'}}>
             <div style={{marginBottom:'30px', fontSize:'25px'}}>
@@ -25,7 +26,7 @@ const Main = () => {
                     <span>{value.typeName}</span>
                     <span>더보기</span>
                 </div>
-                {value.boardResponseDtoList.map((item,index)=>{
+                {value.boardContent.map((item,index)=>{
                     return (
                         <ContentBox key={Math.random()}>
                             <span>{item.title}</span>
@@ -40,7 +41,6 @@ const Main = () => {
 export default Main;
 
 const Wrapper= styled.div`
-    border: 1px solid black;
     height: 200px;
     width: 320px;
     padding: 10px;

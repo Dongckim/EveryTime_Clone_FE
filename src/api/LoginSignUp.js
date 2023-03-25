@@ -18,6 +18,7 @@ const LoginUser = async (LogInUser) => {
     setCookie('token', token, {path:'/'})
 }
 
+
 api.interceptors.request.use(
     (config)=>{
         // const token = Cookies.get('token')
