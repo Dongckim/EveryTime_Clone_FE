@@ -1,27 +1,27 @@
 import { useState } from "react"
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
-const Ninput = ({onChangeHandler, placeholder, label, signUpData, value}) => {
+const Ninput = ({onChangeHandler, placeholder, label, InitialData, value}) => {
     return (
         <>  
             <Stdiv>
                 {value.Title}
             </Stdiv>
             <StInput 
-            value={signUpData.label}
+            value={InitialData.label}
             placeholder={`${placeholder}`}
             required
             onChange={e => onChangeHandler(e, label)}
             />
             {(label == 'loginId')&&(
-                ((signUpData.loginId.length< 4)&&(
+                ((InitialData.loginId.length< 4)&&(
                  <WarnText>
                     4자 이상 입력하세요
                 </WarnText>   
                 ))
             )}
             {(label == 'email')&&(
-                ((signUpData.email.split('').filter(item=> item == '@').join(' ')==[])&&(
+                ((InitialData.email.split('').filter(item=> item == '@').join(' ')==[])&&(
                     <WarnText>
                     올바른 이메일 형식을 입력해주세요
                     </WarnText>  
@@ -29,7 +29,7 @@ const Ninput = ({onChangeHandler, placeholder, label, signUpData, value}) => {
             )
             }
             {(label == 'secretKey')&&(
-                ((signUpData.secretKey == '')&&(
+                ((InitialData.secretKey == '')&&(
                     <WarnText>
                     인증코드를 입력해주세요
                     </WarnText>  

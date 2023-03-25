@@ -1,14 +1,12 @@
 import Ninput from "../../core/Ninput";
 import styled from 'styled-components'
-import { QueryClient, useMutation, useQueryClient } from "react-query";
-import { LoginUser } from "../../api/LoginSignUp";
+import {  useMutation, useQueryClient } from "react-query";
+import { SignUpUser } from "../../api/LoginSignUp";
 import { useState } from "react";
 import BackgroundHeader from "../../core/BackgroundHeader";
 import {AiOutlineArrowLeft} from 'react-icons/ai'
 import {ImCancelCircle} from 'react-icons/im'
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import uuid4 from "uuid4";
 
 const data = [
     {   
@@ -41,7 +39,7 @@ const data = [
     },
     {
         Title : '닉네임',
-        label : "nickname",
+        label : "userName",
         placeholder : "사용하실 닉네임을 적어주세요",
         text : '커뮤니티 활동에 필요'
     },
@@ -49,23 +47,24 @@ const data = [
 
 const Signup = (props) => {
     const queryClient = useQueryClient();
-    const { mutate, isLoading, isSuccess, isIdle } = useMutation({
-        mutationFn: async(newUser) => {
-            await axios.post('http://localhost:4000/signup',newUser)   
-        }
-    })
-    // const mutation = useMutation(LoginUser,{
-    //     onSuccess: () => {
-    //         console.log('성공이요')
+    const navigate = useNavigate();
+    // const { mutate, isLoading, isSuccess, isIdle } = useMutation({
+    //     mutationFn: async(newUser) => {
+    //         await axios.post('http://3.38.102.13/signup',newUser)   
     //     }
     // })
-    const navigate = useNavigate();
+    
+    const mutation = useMutation(SignUpUser,{
+        onSuccess: () => {
+            navigate('/login')
+        }
+    })
 
     const onSubmitHandler = ()  => {
-        mutate(signUpData)
+        mutation.mutate(InitialData)
     } 
 
-    const [signUpData, setSignUpData] = useState({
+    const [InitialData, setInitialData] = useState({
         loginId : '',
         userName : '',
         password: '',
@@ -73,9 +72,9 @@ const Signup = (props) => {
         secretKey: '',
     })
 
-    const onChangeHandler = (e, label, signUpdata) => {
-        setSignUpData({
-            ...signUpData,
+    const onChangeHandler = (e, label) => {
+        setInitialData({
+            ...InitialData,
             [label] : e.target.value
         })
     }
@@ -108,7 +107,7 @@ const Signup = (props) => {
                         placeholder ={value.placeholder} 
                         label={value.label}
                         onChangeHandler={onChangeHandler}
-                        signUpData = {signUpData}
+                        InitialData = {InitialData}
                         value = {value}>
                     </Ninput>)
                 })}
@@ -127,7 +126,7 @@ const Wrapper = styled.form`
     align-Items:center;
     gap:5px;
 `
-const StButton = styled.div`
+export const StButton = styled.div`
     display:flex;
     align-Items:center;
     justify-content:center;
