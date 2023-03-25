@@ -26,11 +26,12 @@ const BoardContent = () => {
                 <PRdate>createdAt</PRdate>
             </div>
             <div>
-                <div>
-                    <Title>제목이다 이쉐끼야</Title>
-                    <Body>가나다라마바사아자차카타파하</Body> 
-                </div>
-                <div></div>
+                <Title>제목이다 이쉐끼야</Title>
+                <Body>가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하</Body> 
+                <CommWrapper>
+                    코멘트 창
+                </CommWrapper>
+                <replyInput/>
             </div>
         </div>
     )
@@ -86,6 +87,21 @@ const Body = styled.div`
     left: 30px;
     width: 310px;
     font-weight: 800;
-    height: 200px;
+    height: min;
+    padding-bottom: 1em;
     border-bottom: 2px solid #666666;
+`
+const CommWrapper = styled.div`
+    display: flex;
+    position: absolute;
+    left: 30px;
+    background-color: white;
+    width: 310px;
+    height: 100px;
+    overflow: scroll;
+`
+const replyInput = styled.input`
+    position: absolute;
+    background-color: white;
+    top: 300px;
 `
