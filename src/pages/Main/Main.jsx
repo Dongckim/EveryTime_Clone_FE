@@ -25,11 +25,10 @@ const Main = () => {
                     <span>{value.typeName}</span>
                     <span>더보기</span>
                 </div>
-                {value.boardResposeDtoList.map((item,index)=>{
+                {value.boardResponseDtoList.map((item,index)=>{
                     return (
                         <ContentBox key={Math.random()}>
                             <span>{item.title}</span>
-                            <span>{item.content}</span>
                         </ContentBox>
                         )
                 })}
