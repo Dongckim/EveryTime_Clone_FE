@@ -17,7 +17,7 @@ const Layout = styled.div`
     align-items: center;
     height: 812px;
     width:375px;
-    background-color: white;
+    background-color: #111111;
     margin-top: 100px;
     margin-bottom: 100px;
 `

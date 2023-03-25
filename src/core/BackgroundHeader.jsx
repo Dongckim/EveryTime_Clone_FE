@@ -15,8 +15,7 @@ const Header = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    position: relative;
-    bottom: 54px;
+    position: absolute;
     height: 72px;
     width:375px;
     background-color: #111111;

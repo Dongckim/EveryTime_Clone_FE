@@ -100,7 +100,7 @@ const Signup = (props) => {
                         </BackButton>
                     </Stdiv>
                 </BackgroundHeader>
-                <span style={{fontSize:'20px', color:'black'}}>회원가입</span>
+                <span style={{fontSize:'20px', color:'black', marginTop:'90px'}}>회원가입</span>
                 {data.map((value, index) => {
                     return  (
                     <Ninput key={value.label}
@@ -125,6 +125,9 @@ const Wrapper = styled.form`
     flex-direction: column;
     align-Items:center;
     gap:5px;
+    height: 100%;
+    width: 100vw;
+    background-color: #ffffff;
 `
 export const StButton = styled.div`
     display:flex;
