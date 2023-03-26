@@ -19,4 +19,5 @@ const Layout = styled.div`
     width:375px;
     background-color: #111111;
     position: fixed;
+    margin-top: 40px;
 `

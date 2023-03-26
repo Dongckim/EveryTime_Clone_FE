@@ -34,13 +34,13 @@ const Dashboard = () => {
     return (
         <div style={{color:'white'}}>
             <SelectHeader>
-                <span style={{marginLeft:'10px'}}
+                <span style={{padding:'20px'}}
                 onClick={()=>{
                     navigator('/')
                 }}
                 ><AiOutlineArrowLeft/></span>
                 <span>{data[0].typeName}</span>
-                <span style={{marginRight:'10px'}}></span>
+                <span style={{padding : '20px', color:'#111111'}}><AiOutlineArrowLeft/></span>
             </SelectHeader>
             <WrapperContainer>
                 {data[0].boardContent.map((item)=>{
