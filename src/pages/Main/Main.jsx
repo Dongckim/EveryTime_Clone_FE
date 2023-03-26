@@ -8,7 +8,7 @@ const Main = () => {
     const { isLoading, isError, data } = useQuery('getMain',getMain,{
         refetchOnWindowFocus:false
     })
-    console.log(data)
+
     return (
         <div style={{marginTop:'0px',color:'#ffffff'}}>
             <div style={{marginBottom:'30px', fontSize:'25px'}}>

@@ -2,17 +2,30 @@ import styled from "styled-components";
 import { AiOutlineArrowLeft } from 'react-icons/ai'
 import { useNavigate, useParams } from "react-router-dom";
 import Profile from "../../core/Profile";
-import { useQuery } from "react-query";
-import { getDashBoard } from "../../api/DashBoard";
+import { isError, useQueries, useQuery } from "react-query";
+import axios from "axios";
+import { getCookie } from "../../api/Cookies";
 
 const BoardContent = () => {
     const navigator = useNavigate();
-    const param = useParams();
-    console.log('파람',param)
-    const { isLoading, data, isError } = useQuery('getMain',getDashBoard,{
-        refetchOnWindowFocus: false
+    const {boardId}= useParams();
+    const accessToken = getCookie('token')
+    const { data, isLoading, isError } = useQuery({
+        queryKey : ['getThatBoard'],
+        queryFn : async() => {
+            const response = await axios.get(`http://3.38.102.13/api/board/${boardId}`,{
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                } 
+            })
+            return response.data.data
+        }
     })
-    console.log(data)
+
+    if(isLoading || isError){
+        return <div>...로딩중이야</div>
+    }
+
     return (
         <div>
             <Headerdiv>
@@ -22,19 +35,19 @@ const BoardContent = () => {
                 }}
                 ><AiOutlineArrowLeft/></div>
                 <ALdiv>
-                    <span style={{fontSize:'16px', fontWeight:'600'}}>공지방</span>
+                    <span style={{fontSize:'16px', fontWeight:'600'}}>{data.typeName}</span>
                     <span style={{fontSize:'13px', fontWeight:'900', color:'#686868'}}>13기</span>
                 </ALdiv>
                 <div style={{padding : '20px', color:'#111111'}}><AiOutlineArrowLeft/></div>
             </Headerdiv>
             <div>
                 <Profile/>
-                <PRdiv>닉네임</PRdiv>
-                <PRdate>createdAt</PRdate>
+                <PRdiv>{data.userName}</PRdiv>
+                <PRdate>{data.createdAt}</PRdate>
             </div>
             <div>
-                <Title>제목이다 이쉐끼야</Title>
-                <Body>가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하</Body> 
+                <Title>{data.title}</Title>
+                <Body>{data.content}</Body> 
                 <CommWrapper>
                     코멘트 창
                 </CommWrapper>
