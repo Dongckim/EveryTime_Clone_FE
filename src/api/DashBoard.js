@@ -14,7 +14,9 @@ const apiTok = axios.create({
 
 //선택게시물에서 던져주기
 const addDashBoard = async (newContent) => {
+  console.log(newContent)
   const response = await apiTok.post(`api/board`,newContent)
+  
   return response
 }
 

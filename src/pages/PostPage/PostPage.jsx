@@ -1,18 +1,41 @@
+import axios from "axios";
 import { useState } from "react";
+import { ImCancelCircle} from "react-icons/im";
 import { useMutation, useQueryClient } from "react-query";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
+import { getCookie } from "../../api/Cookies";
 import { addDashBoard } from "../../api/DashBoard";
-import BackgroundHeader from "../../core/BackgroundHeader";
-import Ninput from "../../core/Ninput";
+import PostPageButton from "../../core/PostPageButton";
+import { editModeHandler, openHandler } from "../../redux/modules/Board";
 
 const PostPage = () => {
     const { boardType } = useParams();
     const navigator = useNavigate();
+    const dispatch = useDispatch();
     const queryClient = useQueryClient();
-    const mutation = useMutation(addDashBoard,{
+    const {isopen, isEdit, boardId} = useSelector(state => state.Board)
+    const mutation = useMutation({
+        mutationFn:(newcontent)=>{
+            addDashBoard(newcontent)
+        }, 
         onSuccess: () => {
+            queryClient.invalidateQueries('getDashBoard');
             navigator(`/${boardType}`)
+        }
+    })
+    const accessToken = getCookie('token')
+    const mutator = useMutation({
+        mutationFn: async(editState) => {
+            const response = await axios.patch(`http://3.38.102.13/api/board/${boardId}`,editState,{
+                headers:{
+                    Authorization:`Bearer ${accessToken}`
+                }
+            })
+        },
+        onSuccess:()=>{
+            queryClient.invalidateQueries('getDashBoard');
         }
     })
     
@@ -22,31 +45,79 @@ const PostPage = () => {
         boardType: +boardType
     })
 
+    const editCompleteStatus = () => {
+        mutator.mutate(state)
+        dispatch(editModeHandler())
+        dispatch(openHandler())
+        navigator(`/board/${boardId}`)
+    }
+
+    const PostAddHandler = () => {
+        mutation.mutate(state)
+    }
+
     console.log(state)
     return (
         <>
             <div>
-                <button onClick={()=>{
-                    mutation.mutate(state)
-                }}>글쓰기</button>
-                <Wrapper>
-                    <STinput placeholder="제목"
-                    onChange={(e)=>{
-                        setState({
-                            ...state,
-                            title : e.target.value,
-                        })
-                    }}/>
-                    <STtextarea placeholder="내용을 입력하세요."
+                {isEdit ? (
+                <>
+                    <HeaderPost>
+                        <ImCancelCircle onClick={()=>{
+                            navigator(`/${boardType}`)
+                            dispatch(editModeHandler())
+                        }}/>
+                        <span style={{marginLeft:'40px'}}>수정하기</span>
+                        <button onClick={editCompleteStatus}>수정완료</button>
+                    </HeaderPost>
+                    <Wrapper>
+                        <STinput placeholder="제목"
                         onChange={(e)=>{
                             setState({
                                 ...state,
-                                content: e.target.value
+                                title : e.target.value,
                             })
-                        }}  
-                    />
-                </Wrapper>
-                <Stdiv>
+                        }}/>
+                        <STtextarea placeholder="내용을 입력하세요."
+                            onChange={(e)=>{
+                                setState({
+                                    ...state,
+                                    content: e.target.value
+                                })
+                            }}  
+                        />
+                    </Wrapper>   
+                </>
+                ):(
+                <>
+                    <HeaderPost>
+                        <ImCancelCircle onClick={()=>{
+                            navigator(`/${boardType}`)
+                            dispatch(editModeHandler())
+                        }}/>
+                        <button onClick={PostAddHandler}>완료</button>
+                    </HeaderPost>
+                    <Wrapper>
+                        <STinput placeholder="제목"
+                        onChange={(e)=>{
+                            setState({
+                                ...state,
+                                title : e.target.value,
+                            })
+                        }}/>
+                        <STtextarea placeholder="내용을 입력하세요."
+                            onChange={(e)=>{
+                                setState({
+                                    ...state,
+                                    content: e.target.value
+                                })
+                            }}  
+                        />
+                    </Wrapper>   
+                </>
+                )}
+                
+                <div>
                    <Txtdiv>
                     에브리항해는 누구나 기분 좋게 참여할 수 있는 커뮤니티를 만들기 위해 커뮤니티 이용규칙을 재정하여 운영하고 있습니다. 위반 시 게시물이 삭제되고 서비스 이용이 일정 기간 제한될 수 있습니다. 
                     </Txtdiv>
@@ -76,7 +147,7 @@ const PostPage = () => {
                     <li>음란물, 성적 수치심을 유발하는 행위</li>
                     <li>스포일러, 공포, 속임, 놀라게 하는 행위</li>
                     </Txtdiv> 
-                </Stdiv>
+                </div>
             </div>
         </>
         
@@ -114,7 +185,15 @@ const STtextarea = styled.textarea`
     font-size: 15px;
     border: none;
     color: #ffffff;
+    margin-bottom: 50px;
 `
-const Stdiv = styled.div`
-
+const HeaderPost = styled.div`
+    position: relative;
+    color: white;
+    height: 30px;
+    display: flex;
+    margin-bottom: 30px;
+    justify-content: space-between;
+    align-items: center;
 `
+   

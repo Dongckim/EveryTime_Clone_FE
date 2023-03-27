@@ -1,7 +1,8 @@
 import axios from "axios";
-import jwtDecode from "jwt-decode";
 import { AiOutlineArrowLeft } from "react-icons/ai";
+import {ImPencil2} from 'react-icons/im'
 import { useQuery } from "react-query";
+import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { getCookie } from "../../api/Cookies";
@@ -22,8 +23,6 @@ const Dashboard = () => {
         }
     })
 
-    console.log(data)
-
     const onClickHandler = (id) => {
         navigator(`${id}`)
     }
@@ -31,6 +30,7 @@ const Dashboard = () => {
     if(isLoading || isError){
         return <div>로딩중</div>
     }
+
     return (
         <div style={{color:'white'}}>
             <SelectHeader>
@@ -44,21 +44,22 @@ const Dashboard = () => {
             </SelectHeader>
             <WrapperContainer>
                 {data[0].boardContent.map((item)=>{
-                return <PostWrapper key={Math.random()}
+                return (
+                <PostWrapper key={Math.random()}
                 onClick={()=>onClickHandler(item.id)}>
                     {item.title}
-
                     </PostWrapper>
+                )
                 })}
             </WrapperContainer>
-            
-            <div onClick={()=>{
+            <ButtonWriter onClick={()=>{
                 navigator(`/${boardType}/PostPage`)
-            }}>글쓰기
-            </div>
+            }}><ImPencil2/>글쓰기
+            </ButtonWriter>
         </div>
     )
 }
+
 export default Dashboard;
 
 const SelectHeader = styled.div`
@@ -75,13 +76,30 @@ const SelectHeader = styled.div`
 `
 const PostWrapper = styled.div`
     display: flex;
+    align-items: center;
+    padding: 8px;
     border-bottom: 1px solid gray;
     margin-bottom: 10px;
-    padding: 20px;
-    width : 300px;
+    width : 330px;
 `
 const WrapperContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    width:375px;
+`
+const ButtonWriter = styled.div`
+    border: 2px solid gray;
+    background-color: #111111;
+    position: fixed;
+    left:35%;
+    top: 80%;
+    display: flex;
+    justify-content: center;
+    width :115px;
+    height: 45px;
+    border-radius: 25px;
+    align-items: center;
+    gap: 15px;
+    cursor: pointer;
 `

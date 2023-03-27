@@ -13,6 +13,7 @@ const Main = () => {
     })
     const onLogoutHandler = () => {
         DelCookie('token')
+        window.location.reload();
     }
     useEffect(()=>{
         const token = getCookie('token')
@@ -27,7 +28,7 @@ const Main = () => {
                 <ControlHead> 
                     <span style={{fontWeight:'900', color:'#D46655'}}>에브리항해</span>
                     <div style={{display:"flex", gap:'10px'}}>
-                        <span style={{color:'#D46655'}}
+                        <span style={{color:'#D46655', cursor:'pointer'}}
                             onClick={onLogoutHandler}
                         >로그아웃</span>
                         <span style={{color:'#D46655'}}>회원탈퇴</span>
@@ -66,6 +67,7 @@ const Wrapper= styled.div`
     border: 1px solid gray;
     border-radius: 10px;
     margin-bottom: 10px;
+    cursor: pointer;
 `
 const ContentBox = styled.div`
     display: flex;

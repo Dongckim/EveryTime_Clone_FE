@@ -1,10 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
+import Board from "../modules/Board";
 
 
 
 const store = configureStore({
     reducer: { 
-      LoginSignup, Main, PostPage, Board,
+      Board,
   },
   devTools: process.env.NODE_ENV === "developmetns" ? false : true,
   });
