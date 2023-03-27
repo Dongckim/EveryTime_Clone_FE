@@ -18,7 +18,7 @@ const Stdiv = styled.div`
     flex-direction: column;
     align-items: center;
     color: #3d78ee;
-    top:61%
+    top:70%;
 `
 
 export default ModalContainer;

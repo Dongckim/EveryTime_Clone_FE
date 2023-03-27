@@ -17,7 +17,7 @@ const STdiv = styled.div`
     background-color: rgb(0,0,0,0.2);
     transform: translate(-50%, -50%);
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
     flex-direction: column;
     gap: 5px;

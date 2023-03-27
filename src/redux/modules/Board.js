@@ -3,6 +3,8 @@ import { createSlice } from "@reduxjs/toolkit"
 const initialState = {
     isEdit : true,
     isopen : false,
+    isReplyOpen : false,
+    ReplyId : 0,
     boardId : 0,
 }
 
@@ -17,12 +19,15 @@ export const modalSlice = createSlice({
             state.isEdit = !state.isEdit
         },
         storeBoardId : (state, action) => {
-            console.log(action.payload)
             state.boardId = action.payload
+        },
+        isReplyOpenHandler:(state,action)=>{
+            state.isReplyOpen = !state.isReplyOpen
+            state.ReplyId = action.payload
         }
     }
 })
 
 
-export const {openHandler, editModeHandler, storeBoardId} = modalSlice.actions;
+export const {openHandler, editModeHandler, storeBoardId, isReplyOpenHandler} = modalSlice.actions;
 export default modalSlice.reducer;
