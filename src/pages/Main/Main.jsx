@@ -1,3 +1,5 @@
+import jwtDecode from "jwt-decode";
+import { useState } from "react";
 import { useEffect } from "react";
 import { AiOutlineRight } from "react-icons/ai";
 import { useQuery } from "react-query";
@@ -15,6 +17,9 @@ const Main = () => {
         DelCookie('token')
         window.location.reload();
     }
+    const className = getCookie('className')
+
+
     useEffect(()=>{
         const token = getCookie('token')
         if(!token){
@@ -34,7 +39,7 @@ const Main = () => {
                         <span style={{color:'#D46655'}}>회원탈퇴</span>
                     </div>
                 </ControlHead>
-                <span style={{fontWeight:'900'}}>13기</span>
+                <span style={{fontWeight:'900'}}>{className}</span>
             </HeaderTop>
            {data?.data.data.map((value,index)=> {
             return (

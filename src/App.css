@@ -5,3 +5,9 @@
   display: flex;
   justify-content: center;
 }
+input:focus{
+  outline: none;
+}
+textarea:focus{
+  outline: none;
+}

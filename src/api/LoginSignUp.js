@@ -1,5 +1,6 @@
 //axios 들어가는 모든 모듈
 import axios from "axios";
+import jwtDecode from "jwt-decode";
 import { setCookie } from "./Cookies";
 
 const api = axios.create({
@@ -15,6 +16,8 @@ const SignUpUser = async (newUser) => {
 const LoginUser = async (LogInUser) => {
     const response = await api.post('/api/users/login', LogInUser)    
     const token = response.headers.authorization.split(' ')[1]
+    const newToken = jwtDecode(token)
+    setCookie('className', newToken.className, {path:'/'})
     setCookie('token', token, {path:'/'})
 }
 

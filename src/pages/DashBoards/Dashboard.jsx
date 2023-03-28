@@ -62,11 +62,11 @@ const Dashboard = () => {
     const onClickHandler = (id) => {
         navigator(`${id}`)
     }
+
     if(isLoading || isError){
         return <div style={{color:"white"}}>로딩중</div>
     }
 
-    console.log(items)
     return (
         <div style={{color:'white', overflow: 'scroll', height:'750px',marginTop:'60px'}}>
             <SelectHeader>
@@ -137,7 +137,7 @@ const PostWrapper = styled.div`
     padding: 8px;
     border-bottom: 1px solid gray;
     margin-bottom: 10px;
-    width : 330px;
+    width : 320px;
 `
 const WrapperContainer = styled.div`
     display: flex;
@@ -148,9 +148,9 @@ const WrapperContainer = styled.div`
 const ButtonWriter = styled.div`
     border: 2px solid gray;
     background-color: #111111;
-    position: fixed;
+    position: absolute;
     left:35%;
-    top: 80%;
+    top: 85%;
     display: flex;
     justify-content: center;
     width :115px;
