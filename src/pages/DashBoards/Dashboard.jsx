@@ -1,5 +1,4 @@
 import axios from "axios";
-import jwtDecode from "jwt-decode";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import {ImPencil2} from 'react-icons/im'
 import{FaRegThumbsUp, FaRegCommentDots} from 'react-icons/fa'
@@ -8,12 +7,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { getCookie } from "../../api/Cookies";
-import editModeHandler from '../../redux/modules/Board'
+import { useEffect } from "react";
+import { useInView } from "react-intersection-observer";
+import { useCallback } from "react";
+import { useState } from "react";
 
 const Dashboard = () => {
     const dispatch = useDispatch();
-    const token = jwtDecode(getCookie('token'))
-    console.log(token)
     const navigator = useNavigate();
     const { boardType } = useParams();
     const { data, isLoading, isError } = useQuery({
@@ -28,16 +28,45 @@ const Dashboard = () => {
             return data.data.data
         }
     })
+    const [items, setItems] =useState([]);
+    const [loading, setLoading] = useState(false);
+    const [page, setPage] = useState(1);
+    const [ref, inview] = useInView({
+        threshold: 0,
+    });
+    const getItems = useCallback(async()=>{
+        setLoading(true)
+        const accessToken = getCookie('token')
+        await axios.get(`http://3.38.102.13/api/boards/test?board-type=${+boardType}&page=${page}`,{
+                headers: {
+                        Authorization: `Bearer ${accessToken}`
+                    } 
+            }).then(res => {
+                const newLoadedComment = res.data.data[0].boardContent
+                setItems(prevState => [...prevState, ...newLoadedComment])
+            }).catch(error => alert(error.response.data.message))
+        setLoading(false)
+    },[page])
 
+    useEffect(()=>{
+        getItems()
+    },[getItems])
+
+    useEffect(()=>{
+        if(inview && !loading){
+            setPage(preState => preState + 1)
+        }
+    },[inview]);
+
+    
     const onClickHandler = (id) => {
         navigator(`${id}`)
     }
-
     if(isLoading || isError){
-        return <div>로딩중</div>
+        return <div style={{color:"white"}}>로딩중</div>
     }
 
-    console.log(data)
+    console.log(items)
     return (
         <div style={{color:'white', overflow: 'scroll', height:'750px',marginTop:'60px'}}>
             <SelectHeader>
@@ -50,22 +79,35 @@ const Dashboard = () => {
                 <span style={{padding : '20px', color:'#111111'}}><AiOutlineArrowLeft/></span>
             </SelectHeader>
             <WrapperContainer>
-                {data[0].boardContent.map((item)=>{
-                return (
-                <PostWrapper key={Math.random()}
-                    onClick={()=>onClickHandler(item.id)}>
-                        <span style={{fontSize:'15px', fontWeight:'800'}}>{item.title}</span>
-                        <div style={{fontSize:'10px', marginTop:'8px', width:'vmin',display:'flex', justifyContent:'space-between'}}>
-                            <span>{item.createdAt}</span>
-                            <div style={{display:'flex', gap:'10px',fontSize:'12px'}}>
-                                <span><FaRegThumbsUp/>{item.totalLike}</span>
-                                <span><FaRegCommentDots/>{item.totalComment}</span> 
+                {items.map((item,idx) =>
+                    (items.length -1 == idx 
+                        ? <PostWrapper
+                                key={item.id}
+                                ref={ref}
+                                onClick={()=>onClickHandler(item.id)}>
+                                <span style={{fontSize:'15px', fontWeight:'800'}}>{item.title}</span>
+                                <div style={{fontSize:'10px', marginTop:'8px', width:'vmin',display:'flex', justifyContent:'space-between'}}>
+                                    <span>{item.createdAt}</span>
+                                    <div style={{display:'flex', gap:'10px',fontSize:'12px'}}>
+                                        <span><FaRegThumbsUp/>{item.totalLike}</span>
+                                        <span><FaRegCommentDots/>{item.totalComment}</span> 
+                                    </div>
+                                </div>
+                            </PostWrapper>
+                        : <PostWrapper 
+                            key={item.id}
+                            onClick={()=>onClickHandler(item.id)}>
+                            <span style={{fontSize:'15px', fontWeight:'800'}}>{item.title}</span>
+                            <div style={{fontSize:'10px', marginTop:'8px', width:'vmin',display:'flex', justifyContent:'space-between'}}>
+                                <span>{item.createdAt}</span>
+                                <div style={{display:'flex', gap:'10px',fontSize:'12px'}}>
+                                    <span><FaRegThumbsUp/>{item.totalLike}</span>
+                                    <span><FaRegCommentDots/>{item.totalComment}</span> 
+                                </div>
                             </div>
-                            
-                        </div>
-                </PostWrapper>
-                )
-                })}
+                          </PostWrapper>
+                    )
+                )}   
             </WrapperContainer>
             <ButtonWriter onClick={()=>{
                 navigator(`/${boardType}/PostPage`)
