@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { AiOutlineArrowLeft } from 'react-icons/ai'
 import {BiDotsVerticalRounded} from 'react-icons/bi'
 import { useNavigate, useParams } from "react-router-dom";
-import { FaRegThumbsUp} from 'react-icons/fa';
+import { FaRegCommentDots, FaRegThumbsUp} from 'react-icons/fa';
 import Profile from "../../core/Profile";
 import {IoPerson} from 'react-icons/io5'
 import { useMutation, useQuery, useQueryClient } from "react-query";
@@ -80,6 +80,9 @@ const BoardContent = () => {
                     Authorization: `Bearer ${accessToken}`
                 }
             })
+        },
+        onSuccess:()=>{
+            queryClient.invalidateQueries(['getThatBoard'])
         }
     })
 
@@ -178,11 +181,17 @@ const BoardContent = () => {
                 <div>
                     <Title>{data.title}</Title>
                     <Body>
-                    <span>{data.content}</span>
-                    <ThumbUp onClick={()=>{
-                            AddLike.mutate()
-                        }}> <FaRegThumbsUp/> 공감
-                    </ThumbUp>
+                    <span style={{fontWeight:'500'}}>{data.content}</span>
+                    <div>
+                        <ThumbUp onClick={()=>{
+                                AddLike.mutate()
+                            }}> <FaRegThumbsUp/> 공감
+                        </ThumbUp>
+                        <div style={{position:'absolute', top:'82px', fontSize:'15px', display:'flex', gap:'8px'}}>
+                            <span style={{color:'#c53b26',fontWeight:'500'}}><FaRegThumbsUp/>{data.totalLike}</span>
+                            <span style={{color:'#3bdb90',fontWeight:'500'}}><FaRegCommentDots/>{data.totalComment}</span>
+                        </div>
+                    </div>
                     </Body> 
                 </div>
                 <div>
@@ -260,14 +269,14 @@ const AnonyDiv = styled.div`
 `
 
 const ThumbUp = styled.div`
-    margin-top: 10px;
+    top: 110px;
     color: white;
     position:absolute;
     color: #7a7a7a;
     border: 1px solid gray;
     font-size: 12px;
     padding:8px;
-    border-radius: 20px;
+    border-radius: 10px;
 `
 const AnonymousCheck = styled.input`
     position: absolute;
@@ -342,10 +351,10 @@ const CommWrapper = styled.div`
     flex-direction: column;
     position: absolute;
     color: white;
-    top: 280px;
+    top: 330px;
     left: 30px;
-    width: 310px;
-    height: 450px;
+    width: 320px;
+    height: 400px;
     overflow: scroll;
 `
 const ReplyInput = styled.input`

@@ -1,13 +1,19 @@
 import axios from "axios";
+import jwtDecode from "jwt-decode";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import {ImPencil2} from 'react-icons/im'
+import{FaRegThumbsUp, FaRegCommentDots} from 'react-icons/fa'
 import { useQuery } from "react-query";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { getCookie } from "../../api/Cookies";
+import editModeHandler from '../../redux/modules/Board'
 
 const Dashboard = () => {
+    const dispatch = useDispatch();
+    const token = jwtDecode(getCookie('token'))
+    console.log(token)
     const navigator = useNavigate();
     const { boardType } = useParams();
     const { data, isLoading, isError } = useQuery({
@@ -33,7 +39,7 @@ const Dashboard = () => {
 
     console.log(data)
     return (
-        <div style={{color:'white'}}>
+        <div style={{color:'white', overflow: 'scroll', height:'750px',marginTop:'60px'}}>
             <SelectHeader>
                 <span style={{padding:'20px'}}
                 onClick={()=>{
@@ -47,9 +53,17 @@ const Dashboard = () => {
                 {data[0].boardContent.map((item)=>{
                 return (
                 <PostWrapper key={Math.random()}
-                onClick={()=>onClickHandler(item.id)}>
-                    {item.title}
-                    </PostWrapper>
+                    onClick={()=>onClickHandler(item.id)}>
+                        <span style={{fontSize:'15px', fontWeight:'800'}}>{item.title}</span>
+                        <div style={{fontSize:'10px', marginTop:'8px', width:'vmin',display:'flex', justifyContent:'space-between'}}>
+                            <span>{item.createdAt}</span>
+                            <div style={{display:'flex', gap:'10px',fontSize:'12px'}}>
+                                <span><FaRegThumbsUp/>{item.totalLike}</span>
+                                <span><FaRegCommentDots/>{item.totalComment}</span> 
+                            </div>
+                            
+                        </div>
+                </PostWrapper>
                 )
                 })}
             </WrapperContainer>
@@ -77,7 +91,7 @@ const SelectHeader = styled.div`
 `
 const PostWrapper = styled.div`
     display: flex;
-    align-items: center;
+    flex-direction: column;
     padding: 8px;
     border-bottom: 1px solid gray;
     margin-bottom: 10px;

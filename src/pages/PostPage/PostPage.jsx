@@ -35,7 +35,7 @@ const PostPage = () => {
             })
         },
         onSuccess:()=>{
-            queryClient.invalidateQueries('getDashBoard');
+            queryClient.invalidateQueries(['getDashBoard']);
         }
     })
     
@@ -49,7 +49,7 @@ const PostPage = () => {
         mutator.mutate(state)
         dispatch(editModeHandler())
         dispatch(openHandler())
-        navigator(`/board/${boardId}`)
+        navigator(`/${boardType}`)
     }
 
     const PostAddHandler = () => {
@@ -175,9 +175,6 @@ const STinput= styled.input`
     font-size: 20px;
     border-bottom: 1px solid gray;
     color: #ffffff;
-    /* :active{
-        border: none;
-    } */
 `
 const STtextarea = styled.textarea`
     background-color: transparent;
@@ -196,4 +193,3 @@ const HeaderPost = styled.div`
     justify-content: space-between;
     align-items: center;
 `
-   

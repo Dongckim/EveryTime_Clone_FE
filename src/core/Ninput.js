@@ -5,11 +5,13 @@ const Ninput = ({onChangeHandler, placeholder, label, InitialData, value}) => {
     return (
         <>  
             <Stdiv>
-                {value.Title}
+                <span style = {{color:'#111111'}}>{value.Title}</span>
+                <span style = {{fontWeight:'900', fontSize:'10px',color:'#111111'}}>{value.text}</span>
             </Stdiv>
             <StInput 
             value={InitialData.label}
             placeholder={`${placeholder}`}
+            type={InitialData.label}
             required
             onChange={e => onChangeHandler(e, label)}
             />
@@ -65,4 +67,7 @@ const Stdiv = styled.div`
     margin-left: 1.5em;
     font-size: 12px;
     margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
 `

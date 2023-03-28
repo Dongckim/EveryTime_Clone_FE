@@ -101,17 +101,21 @@ const Signup = (props) => {
                     </Stdiv>
                 </BackgroundHeader>
                 <span style={{fontSize:'20px', color:'black', marginTop:'90px'}}>회원가입</span>
-                {data.map((value, index) => {
-                    return  (
-                    <Ninput key={value.label}
-                        placeholder ={value.placeholder} 
-                        label={value.label}
-                        onChangeHandler={onChangeHandler}
-                        InitialData = {InitialData}
-                        value = {value}>
-                    </Ninput>)
-                })}
-                <StButton onClick={onSubmitHandler}>회원가입</StButton>
+                <form>
+                    {data.map((value, index) => {
+                        return  (
+                        <Ninput key={value.label}
+                            placeholder ={value.placeholder} 
+                            label={value.label}
+                            onChangeHandler={onChangeHandler}
+                            InitialData = {InitialData}
+                            value = {value}
+                            >
+                        </Ninput>)
+                    })}
+                    <StButton onClick={onSubmitHandler}>회원가입</StButton>
+                </form>
+                
             </Wrapper>
         </>    
         
