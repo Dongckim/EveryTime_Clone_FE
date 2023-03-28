@@ -19,7 +19,7 @@ const BoardContent = () => {
     const navigator = useNavigate();
     const [inputValue, setInputValue] = useState({
         "comment" : "",
-        "anonymous":false
+        "anonymous": false
     })
     const queryClient = useQueryClient();
     const {boardId, boardType} = useParams();
@@ -55,6 +55,7 @@ const BoardContent = () => {
             
         }
     })
+
     const mutatorReply = useMutation({
         mutationFn: async(newComment) => {
             await axios.post(`http://3.38.102.13/api/comment/${boardId}`,newComment,{
@@ -74,7 +75,7 @@ const BoardContent = () => {
 
     const AddLike = useMutation({
         mutationFn: async() => {
-            await axios.post(`http://3.38.102.13/api/board/${+boardId}`,null,{
+            await axios.post(`http://3.38.102.13/api/boards/${+boardId}`,null,{
                 headers:{
                     Authorization: `Bearer ${accessToken}`
                 }
@@ -100,7 +101,6 @@ const BoardContent = () => {
         }
     })
 
-
     const editMode = () => {
         const token = jwtDecode(getCookie('token'))
         if(token.sub == data.userName){
@@ -123,16 +123,34 @@ const BoardContent = () => {
     }
 
     const onChangeHandler = (event) => {
-        setInputValue({
-            comment: event.target.value,
-            anonymous:'false'
-        })
+        const {name, value, checked} = event.target
+        if(name == 'anonymous'){
+            setInputValue({
+                ...inputValue,
+                [name]:checked
+            })
+        }else{
+            setInputValue({
+                ...inputValue,
+                [name]:value
+            })
+        }
+        
     }
 
     const onReplyPost = (event) => {
         event.preventDefault();
         mutatorReply.mutate(inputValue)
+        const {name} = event.target
+        if(name == 'anonymous'){
+            setInputValue({
+            ...inputValue,
+                [name]:true
+            })
+        }
     }
+
+    console.log(data)
 
     return (
         <>
@@ -187,13 +205,17 @@ const BoardContent = () => {
                     </CommWrapper>
                     <form onSubmit={(event)=>{onReplyPost(event)}}>
                         <div>
-                            <AnonymousCheck type={"checkbox"}/>
+                            <AnonymousCheck type={"checkbox"}
+                                onChange={onChangeHandler}
+                                name='anonymous'
+                            />
                             <AnonyDiv>익명</AnonyDiv>
                         </div>
                         <ReplyInput
+                        name="comment"
                         value={inputValue.comment}
                         placeholder="댓글을 입력하세요"
-                        onChange={(event)=>onChangeHandler(event)}
+                        onChange={onChangeHandler}
                         style={{color:"white"}}
                         /> 
                     </form>

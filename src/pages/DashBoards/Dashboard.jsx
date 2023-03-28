@@ -31,6 +31,7 @@ const Dashboard = () => {
         return <div>로딩중</div>
     }
 
+    console.log(data)
     return (
         <div style={{color:'white'}}>
             <SelectHeader>

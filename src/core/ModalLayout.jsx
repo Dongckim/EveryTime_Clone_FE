@@ -9,10 +9,10 @@ const ModalLayout = ({children}) => {
 }
 
 const STdiv = styled.div`
-    height: 875px;
+    height: 865px;
     width: 375px;
     position: fixed;
-    top: 50%;
+    top: 32.5%;
     left: 50%;
     background-color: rgb(0,0,0,0.2);
     transform: translate(-50%, -50%);
