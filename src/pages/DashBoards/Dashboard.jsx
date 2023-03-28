@@ -34,6 +34,7 @@ const Dashboard = () => {
     const [ref, inview] = useInView({
         threshold: 0,
     });
+    
     const getItems = useCallback(async()=>{
         setLoading(true)
         const accessToken = getCookie('token')
@@ -89,7 +90,11 @@ const Dashboard = () => {
                                 <div style={{fontSize:'10px', marginTop:'8px', width:'vmin',display:'flex', justifyContent:'space-between'}}>
                                     <span>{item.createdAt}</span>
                                     <div style={{display:'flex', gap:'10px',fontSize:'12px'}}>
-                                        <span><FaRegThumbsUp/>{item.totalLike}</span>
+                                        {item.onLike ? 
+                                            <span style={{color:'#d24646'}}><FaRegThumbsUp/>{item.totalLike}</span>
+                                        :
+                                            <span><FaRegThumbsUp/>{item.totalLike}</span>
+                                        }   
                                         <span><FaRegCommentDots/>{item.totalComment}</span> 
                                     </div>
                                 </div>
@@ -101,7 +106,11 @@ const Dashboard = () => {
                             <div style={{fontSize:'10px', marginTop:'8px', width:'vmin',display:'flex', justifyContent:'space-between'}}>
                                 <span>{item.createdAt}</span>
                                 <div style={{display:'flex', gap:'10px',fontSize:'12px'}}>
-                                    <span><FaRegThumbsUp/>{item.totalLike}</span>
+                                        {item.onLike ? 
+                                            <span style={{color:'#d24646'}}><FaRegThumbsUp/>{item.totalLike}</span>
+                                        :
+                                            <span><FaRegThumbsUp/>{item.totalLike}</span>
+                                        }   
                                     <span><FaRegCommentDots/>{item.totalComment}</span> 
                                 </div>
                             </div>

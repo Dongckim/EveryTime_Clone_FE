@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { AiOutlineArrowLeft } from 'react-icons/ai'
 import {BiDotsVerticalRounded} from 'react-icons/bi'
 import { useNavigate, useParams } from "react-router-dom";
@@ -107,9 +107,9 @@ const BoardContent = () => {
     const editMode = () => {
         const token = jwtDecode(getCookie('token'))
         if(token.sub == data.userName){
+            dispatch(openHandler())
             dispatch(editModeHandler())
             dispatch(storeBoardId(+boardId))
-            dispatch(openHandler())
             navigator(`/${boardType}/PostPage`)
         }else{
             dispatch(isReplyOpenHandler())
@@ -183,13 +183,22 @@ const BoardContent = () => {
                     <Body>
                     <span style={{fontWeight:'500'}}>{data.content}</span>
                     <div>
-                        <ThumbUp onClick={()=>{
+                        {data.onLike ? (
+                            <ThumbUp theme={'onLike'} onClick={()=>{
                                 AddLike.mutate()
                             }}> <FaRegThumbsUp/> 공감
-                        </ThumbUp>
+                            </ThumbUp>
+                        ) : (
+                        <ThumbUp theme={'offLike'} onClick={()=>{
+                                AddLike.mutate()
+                            }}> <FaRegThumbsUp/> 공감
+                            </ThumbUp>
+                        )}
                         <div style={{position:'absolute', top:'82px', fontSize:'15px', display:'flex', gap:'8px'}}>
-                            <span style={{color:'#c53b26',fontWeight:'500'}}><FaRegThumbsUp/>{data.totalLike}</span>
-                            <span style={{color:'#3bdb90',fontWeight:'500'}}><FaRegCommentDots/>{data.totalComment}</span>
+                            <span style={{color:'#D46655',fontWeight:'500'}}>
+                                <FaRegThumbsUp/>{data.totalLike}</span>
+                            <span style={{color:'#3bdb90',fontWeight:'500'}}>
+                                <FaRegCommentDots/>{data.totalComment}</span>
                         </div>
                     </div>
                     </Body> 
@@ -221,11 +230,12 @@ const BoardContent = () => {
                             <AnonyDiv>익명</AnonyDiv>
                         </div>
                         <ReplyInput
-                        name="comment"
-                        value={inputValue.comment}
-                        placeholder="댓글을 입력하세요"
-                        onChange={onChangeHandler}
-                        style={{color:"white"}}
+                            name="comment"
+                            value={inputValue.comment}
+                            placeholder="댓글을 입력하세요"
+                            onChange={onChangeHandler}
+                            style={{color:"white"}}
+                            required
                         /> 
                     </form>
                 </div>
@@ -273,10 +283,24 @@ const ThumbUp = styled.div`
     color: white;
     position:absolute;
     color: #7a7a7a;
-    border: 1px solid gray;
+    
     font-size: 12px;
     padding:8px;
     border-radius: 10px;
+    ${({theme})=>{
+        switch(theme){
+            case 'onLike':
+                return css`
+                    color: #D46655;
+                    border: 1px solid #D46655;
+                `
+            case 'offLike':
+                return css`
+                    color: #7a7a7a;
+                    border: 1px solid gray;
+                `
+        }
+    }}
 `
 const AnonymousCheck = styled.input`
     position: absolute;

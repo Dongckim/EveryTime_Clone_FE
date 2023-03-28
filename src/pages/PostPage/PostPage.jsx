@@ -7,7 +7,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { getCookie } from "../../api/Cookies";
 import { addDashBoard } from "../../api/DashBoard";
-import PostPageButton from "../../core/PostPageButton";
 import { editModeHandler, openHandler } from "../../redux/modules/Board";
 
 const PostPage = () => {
@@ -35,7 +34,7 @@ const PostPage = () => {
             })
         },
         onSuccess:()=>{
-            queryClient.invalidateQueries(['getDashBoard']);
+            queryClient.invalidateQueries(['getThatBoard']);
         }
     })
     
@@ -46,10 +45,10 @@ const PostPage = () => {
     })
 
     const editCompleteStatus = () => {
+        dispatch(openHandler())
         mutator.mutate(state)
         dispatch(editModeHandler())
-        dispatch(openHandler())
-        navigator(`/${boardType}`)
+        navigator(`/${boardType}/${boardId}`)
     }
 
     const PostAddHandler = () => {
@@ -93,8 +92,8 @@ const PostPage = () => {
                     <HeaderPost>
                         <ImCancelCircle onClick={()=>{
                             navigator(`/${boardType}`)
-                            dispatch(editModeHandler())
                         }}/>
+                        <span style={{marginLeft:'20px'}}>게시물 작성하기</span>
                         <button onClick={PostAddHandler}>완료</button>
                     </HeaderPost>
                     <Wrapper>
@@ -148,6 +147,7 @@ const PostPage = () => {
                     <li>스포일러, 공포, 속임, 놀라게 하는 행위</li>
                     </Txtdiv> 
                 </div>
+                <input type='file' accept="" />
             </div>
         </>
         
