@@ -38,7 +38,7 @@ const Dashboard = () => {
     const getItems = useCallback(async()=>{
         setLoading(true)
         const accessToken = getCookie('token')
-        await axios.get(`http://3.38.102.13/api/boards/test?board-type=${+boardType}&page=${page}`,{
+        await axios.get(`http://3.38.102.13/api/boards?board-type=${+boardType}&page=${page}`,{
                 headers: {
                         Authorization: `Bearer ${accessToken}`
                     } 

@@ -1,3 +1,4 @@
+import axios from "axios";
 import jwtDecode from "jwt-decode";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -19,6 +20,14 @@ const Main = () => {
     }
     const className = getCookie('className')
 
+    const accessToken = getCookie('token')
+    const discardUser = async() => {
+        await axios.delete('http://3.38.102.13/api/users',{
+            headers:{
+                Authorization:`Bearer ${accessToken}`
+            }
+        })
+    }
 
     useEffect(()=>{
         const token = getCookie('token')
@@ -36,7 +45,8 @@ const Main = () => {
                         <span style={{color:'#D46655', cursor:'pointer'}}
                             onClick={onLogoutHandler}
                         >로그아웃</span>
-                        <span style={{color:'#D46655'}}>회원탈퇴</span>
+                        <span style={{color:'#D46655'}}
+                            onClick={discardUser}>회원탈퇴</span>
                     </div>
                 </ControlHead>
                 <span style={{fontWeight:'900'}}>{className}</span>

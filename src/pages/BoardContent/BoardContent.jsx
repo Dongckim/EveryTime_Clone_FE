@@ -9,11 +9,12 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import axios from "axios";
 import { getCookie } from "../../api/Cookies";
 import { useDispatch, useSelector } from "react-redux";
-import { editModeHandler, isReplyOpenHandler, openHandler, storeBoardId } from "../../redux/modules/Board";
+import { editModeHandler, isReplyOpenHandler, openHandler, openIamge, storeBoardId } from "../../redux/modules/Board";
 import ModalLayout from "../../core/ModalLayout";
 import ModalContainer from "../../core/ModalContainer";
 import jwtDecode from "jwt-decode";
 import { useState } from "react";
+import BigImage from "../../core/BigImage";
 
 const BoardContent = () => {
     const navigator = useNavigate();
@@ -24,7 +25,7 @@ const BoardContent = () => {
     const queryClient = useQueryClient();
     const {boardId, boardType} = useParams();
     const accessToken = getCookie('token')
-    const {isopen, isReplyOpen, ReplyId} = useSelector(state => state.Board)
+    const {isopen, isReplyOpen, ReplyId, isOpenImage} = useSelector(state => state.Board)
     const dispatch = useDispatch();
     const { data, isLoading, isError } = useQuery({
         queryKey : ['getThatBoard'],
@@ -153,7 +154,7 @@ const BoardContent = () => {
         }
     }
 
-    console.log(data)
+    console.log(isOpenImage)
 
     return (
         <>
@@ -182,6 +183,9 @@ const BoardContent = () => {
                     <Title>{data.title}</Title>
                     <Body>
                     <span style={{fontWeight:'500'}}>{data.content}</span>
+                    <div onClick={()=>{dispatch(openIamge(true))}}>
+                        <img src={data.filePath} style={{height:'100px'}}/>
+                    </div>
                     <div>
                         {data.onLike ? (
                             <ThumbUp theme={'onLike'} onClick={()=>{
@@ -194,12 +198,13 @@ const BoardContent = () => {
                             }}> <FaRegThumbsUp/> 공감
                             </ThumbUp>
                         )}
-                        <div style={{position:'absolute', top:'82px', fontSize:'15px', display:'flex', gap:'8px'}}>
+                        <div style={{position:'absolute', left:'3px',top:'128px', fontSize:'15px', display:'flex', gap:'8px'}}>
                             <span style={{color:'#D46655',fontWeight:'500'}}>
                                 <FaRegThumbsUp/>{data.totalLike}</span>
                             <span style={{color:'#3bdb90',fontWeight:'500'}}>
                                 <FaRegCommentDots/>{data.totalComment}</span>
                         </div>
+                        
                     </div>
                     </Body> 
                 </div>
@@ -265,6 +270,15 @@ const BoardContent = () => {
                     </div>
                 </ModalLayout>
             )}
+            {isOpenImage&&(
+                <ModalLayout>
+                    <BigImage>
+                        <img src={data.filePath} style={{width:'350px'}}
+                            onClick={()=>dispatch(openIamge(false))}
+                        />
+                    </BigImage>
+                </ModalLayout>
+            )}
         </>
     )
 }
@@ -279,11 +293,10 @@ const AnonyDiv = styled.div`
 `
 
 const ThumbUp = styled.div`
-    top: 110px;
+    top: 152px;
     color: white;
     position:absolute;
     color: #7a7a7a;
-    
     font-size: 12px;
     padding:8px;
     border-radius: 10px;
@@ -375,10 +388,10 @@ const CommWrapper = styled.div`
     flex-direction: column;
     position: absolute;
     color: white;
-    top: 330px;
+    top: 380px;
     left: 30px;
     width: 320px;
-    height: 400px;
+    height: 350px;
     overflow: scroll;
 `
 const ReplyInput = styled.input`

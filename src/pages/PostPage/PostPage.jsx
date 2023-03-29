@@ -1,8 +1,9 @@
 import axios from "axios";
 import React from "react";
+import { useEffect } from "react";
 import { useState } from "react";
 import { ImCancelCircle} from "react-icons/im";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
@@ -11,11 +12,24 @@ import { addDashBoard } from "../../api/DashBoard";
 import { editModeHandler, openHandler } from "../../redux/modules/Board";
 
 const PostPage = () => {
+
     const { boardType } = useParams();
     const navigator = useNavigate();
     const dispatch = useDispatch();
     const queryClient = useQueryClient();
     const {isopen, isEdit, boardId} = useSelector(state => state.Board)
+    const { data, isLoading, isError } = useQuery({
+        queryKey : ['getThatBoard'],
+        queryFn : async() => {
+            const response = await axios.get(`http://3.38.102.13/api/board/${boardId}`,{
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                } 
+            })
+            return response.data.data
+        }
+    }) 
+    console.log(data)
     const mutation = useMutation({
         mutationFn:(newcontent)=>{
             addDashBoard(newcontent)
@@ -59,6 +73,16 @@ const PostPage = () => {
     const PostAddHandler = () => {
         mutation.mutate(state)
     }
+
+    const DeleteImage = async() => {
+        await axios.delete(`http://3.38.102.13/api/boards/file?file-name=${state.fileName}`,{
+            headers:{
+                Authorization:`Bearer ${accessToken}`
+            }
+        })
+        setImage('')
+    }
+
     const [image, setImage] = useState('')
 
     const onChangeImg = async (event)=>{
@@ -81,8 +105,11 @@ const PostPage = () => {
         }  
     }
     
-
-    console.log(image)
+    useEffect(()=>{
+        if(!accessToken){
+            navigator('/login')
+        }
+    })
 
     return (
         <>
@@ -99,6 +126,7 @@ const PostPage = () => {
                     </HeaderPost>
                     <Wrapper>
                         <STinput placeholder="제목"
+                        defaultValue={data.title}
                         onChange={(e)=>{
                             setState({
                                 ...state,
@@ -106,6 +134,7 @@ const PostPage = () => {
                             })
                         }}/>
                         <STtextarea placeholder="내용을 입력하세요."
+                            defaultValue={data.content}
                             onChange={(e)=>{
                                 setState({
                                     ...state,
@@ -113,6 +142,9 @@ const PostPage = () => {
                                 })
                             }}  
                         />
+                        <div style={{height:'60px'}} src = {data.fileName}>
+                          <img src={image} style={{height:'60px'}}/>  
+                        </div>
                     </Wrapper>   
                 </>
                 ):(
@@ -177,8 +209,12 @@ const PostPage = () => {
                     <li>음란물, 성적 수치심을 유발하는 행위</li>
                     <li>스포일러, 공포, 속임, 놀라게 하는 행위</li>
                     </Txtdiv> 
-                </div>
-                <input type='file' accept="image/*" onChange={onChangeImg}/>
+                </div >
+                    <div style={{display:'flex'}}>
+                        <input type='file' accept="image/*" onChange={onChangeImg}/>
+                        <div style={{color:'white', fontWeight:'600'}}
+                            onClick={DeleteImage}>파일취소</div>     
+                    </div>
             </div>
         </>
         
