@@ -1,4 +1,5 @@
 import axios from "axios";
+import React from "react";
 import { useState } from "react";
 import { ImCancelCircle} from "react-icons/im";
 import { useMutation, useQueryClient } from "react-query";
@@ -21,7 +22,7 @@ const PostPage = () => {
         }, 
         onSuccess: () => {
             queryClient.invalidateQueries('getDashBoard');
-            navigator(`/${boardType}`)
+            navigator(`/`)
         }
     })
     const accessToken = getCookie('token')
@@ -34,28 +35,55 @@ const PostPage = () => {
             })
         },
         onSuccess:()=>{
+            dispatch(openHandler())
+            dispatch(editModeHandler())
             queryClient.invalidateQueries(['getThatBoard']);
         }
     })
     
+    
     const [state, setState] = useState({
         title:'',
         content:'',
-        boardType: +boardType
+        boardType: +boardType,
+        fileName:'',
+        filePath:'',
     })
 
     const editCompleteStatus = () => {
-        dispatch(openHandler())
         mutator.mutate(state)
-        dispatch(editModeHandler())
+        
         navigator(`/${boardType}/${boardId}`)
     }
 
     const PostAddHandler = () => {
         mutation.mutate(state)
     }
+    const [image, setImage] = useState('')
 
-    console.log(state)
+    const onChangeImg = async (event)=>{
+        event.preventDefault();
+        if(event.target.files){
+            const uploadFile = Object.values(event.target.files)[0]
+            const formData = new FormData()
+            formData.append('multipartFile',uploadFile)
+            const response = await axios.post(`http://3.38.102.13/api/boards/file`,formData,{
+                headers:{
+                    Authorization: `Bearer ${accessToken}`
+                }
+            })
+            setState({
+                ...state,
+                ['fileName'] : response.data.data[0].fileName,
+                ['filePath'] : response.data.data[0].filePath
+            })
+            setImage(response.data.data[0].filePath)
+        }  
+    }
+    
+
+    console.log(image)
+
     return (
         <>
             <div>
@@ -112,6 +140,9 @@ const PostPage = () => {
                                 })
                             }}  
                         />
+                        <div style={{height:'60px'}}>
+                          <img src={image} style={{height:'60px'}}/>  
+                        </div>
                     </Wrapper>   
                 </>
                 )}
@@ -147,7 +178,7 @@ const PostPage = () => {
                     <li>스포일러, 공포, 속임, 놀라게 하는 행위</li>
                     </Txtdiv> 
                 </div>
-                <input type='file' accept="" />
+                <input type='file' accept="image/*" onChange={onChangeImg}/>
             </div>
         </>
         
@@ -178,11 +209,10 @@ const STinput= styled.input`
 `
 const STtextarea = styled.textarea`
     background-color: transparent;
-    height: 122px;
+    height: 110px;
     font-size: 15px;
     border: none;
     color: #ffffff;
-    margin-bottom: 50px;
 `
 const HeaderPost = styled.div`
     position: relative;
