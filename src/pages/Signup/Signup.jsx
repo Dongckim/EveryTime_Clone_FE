@@ -140,7 +140,7 @@ export const StButton = styled.div`
     width: 313.11px;
     height: 35.54px;
     border-radius: 12px;
-    margin-top: 80px;
+    margin-top: 50px;
     text-indent:1em;
     font-size: 15px;
     color: #ffffff;

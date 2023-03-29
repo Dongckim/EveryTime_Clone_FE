@@ -21,13 +21,13 @@ const data = [
 ]
 
 const Login = () => {
-    const queryClient = useQueryClient();
     const navigate = useNavigate();
     const mutation = useMutation(LoginUser,{
         onSuccess: () => {
             navigate('/')
         }
     })
+
     const [InitialData, setInitialData] = useState({
         loginId : '',
         password : '',
@@ -39,25 +39,34 @@ const Login = () => {
             [label] : e.target.value
         })
     }
+
     const onSubmitHandler = () => {
         mutation.mutate(InitialData)
     }
     
     return (
-        <form>
-            {data.map((value, index)=> {
-                return(
-                    <Ninput key = {value.label}
-                        placeholder= {value.placeholder}
-                        label = {value.label}
-                        onChangeHandler = {onChangeHandler}
-                        value={value}
-                        InitialData={InitialData}
-                        theme={'login'}
-                    />
-                )
-            })}
-            <StButton onClick={onSubmitHandler}>로그인</StButton>
+        <form style={{display:'flex', flexDirection:'column',alignItems:'center'}}>
+            <img style = {{}} src="KakaoTalk_Image_2023-03-29-23-16-03.png"/> 
+            <div style={{display:'flex', flexDirection:'column'}}>
+               {data.map((value, index)=> {
+                    return(
+                        <Ninput key = {value.label}
+                            placeholder= {value.placeholder}
+                            label = {value.label}
+                            onChangeHandler = {onChangeHandler}
+                            value={value}
+                            InitialData={InitialData}
+                            theme={'login'}
+                        />
+                    )
+                })}
+            <StButton onClick={onSubmitHandler}>에브리항해 로그인</StButton>
+            <div style={{fontWeight:'800', margin:'30px auto', color:'white'}}
+                onClick={()=>{
+                    navigate('/signup')
+                }}
+            >회원가입</div>
+            </div>
         </form>
     )
 }
