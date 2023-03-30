@@ -43,7 +43,7 @@ const Dashboard = () => {
             }).then(res => {
                 const newLoadedComment = res.data.data[0].boardContent
                 setItems(prevState => [...prevState, ...newLoadedComment])
-            }).catch(error => alert(error.response.data.message))
+            })
         setLoading(false)
     },[page])
 
@@ -79,7 +79,7 @@ const Dashboard = () => {
             </SelectHeader>
             <WrapperContainer>
                 {items.map((item,idx) =>
-                    (items.length -1 == idx && items.length -1 > 12
+                    (items.length -1 == idx 
                         ? <PostWrapper
                                 key={item.id}
                                 ref={ref}

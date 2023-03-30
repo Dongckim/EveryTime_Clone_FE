@@ -118,6 +118,9 @@ const PostPage = () => {
             navigator('/login')
         }
     })
+
+    console.log(state)
+
     return (
         <>
             <div>
@@ -134,6 +137,7 @@ const PostPage = () => {
                     <Wrapper>
                         <STinput placeholder="제목"
                         required
+                        maxLength={15}
                         defaultValue={data.title}
                         onChange={(e)=>{
                             setState({
@@ -177,6 +181,7 @@ const PostPage = () => {
                     </HeaderPost>
                     <Wrapper>
                         <STinput placeholder="제목"
+                        maxLength={15}
                         required
                         onChange={(e)=>{
                             setState({

@@ -27,7 +27,7 @@ const Main = () => {
                 Authorization:`Bearer ${accessToken}`
             }
         }).then(
-            (window.alert('탈퇴 완료되었습니다.')&& (
+            (window.confirm('탈퇴 완료되었습니다.')&&(
                 navigate('/login')
             ))
         )

@@ -22,7 +22,7 @@ const data = [
         text : '영문, 숫자, 특문이 2종류 이상 조합된 8-20자'
     },
     {   
-        label : "confirmPassword",
+        label : "password",
         placeholder : "비밀번호를 확인해주세요",
     },
     {   

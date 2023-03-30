@@ -186,7 +186,7 @@ const BoardContent = () => {
                 <div>
                     <Title>{data.title}</Title>
                     <Body>
-                    <div style={{height:'120px',fontWeight:'500', whiteSpace: 'pre-wrap', overflow:'auto', overflowX:'hidden'}}>{data.content}</div>
+                    <div style={{height:'120px',width:'330',fontWeight:'500', whiteSpace: 'pre-wrap', overflow:'auto', overflowX:'hidden'}}>{data.content}</div>
                     <div onClick={()=>{dispatch(openIamge(true))}}>
                         <img src={data.filePath} style={{height:'100px'}}/>
                     </div>
