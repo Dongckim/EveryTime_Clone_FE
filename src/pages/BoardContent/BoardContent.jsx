@@ -68,8 +68,8 @@ const BoardContent = () => {
         onSuccess:()=>{
             queryClient.invalidateQueries(['getThatBoard'])
             setInputValue({
+                ...inputValue,
                 "comment" : "",
-                "anonymous":false
             })
         }
     })
@@ -106,9 +106,8 @@ const BoardContent = () => {
     })
 
     const editMode = () => {
-        const token = jwtDecode(getCookie('token'))
-        if(token.sub === data.userName){
-            dispatch(openHandler(true))
+        if(data.onMine){
+            dispatch(openHandler())
             dispatch(editModeHandler())
             dispatch(storeBoardId(+boardId))
             navigator(`/${boardType}/PostPage`)
@@ -149,7 +148,7 @@ const BoardContent = () => {
         if(name === 'anonymous'){
             setInputValue({
             ...inputValue,
-                [name]:true
+            [name]:true
             })
         }
     }

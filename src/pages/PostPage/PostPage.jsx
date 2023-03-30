@@ -12,7 +12,6 @@ import { addDashBoard } from "../../api/DashBoard";
 import { editModeHandler, openHandler } from "../../redux/modules/Board";
 
 const PostPage = () => {
-
     const { boardType } = useParams();
     const navigator = useNavigate();
     const dispatch = useDispatch();
@@ -60,6 +59,7 @@ const PostPage = () => {
         title:data?.title,
         content:data?.content,
         boardType: +boardType,
+        anonymous: data?.anonymous,
         fileName:'',
         filePath:'',
     })
@@ -97,14 +97,21 @@ const PostPage = () => {
             })
             setState({
                 ...state,
-                title:data.title,
-                content:data.content,
+                title: data.title,
+                content: data.content,
+                anonymous: data.anonymous,
                 ['fileName'] : response.data.data[0].fileName,
                 ['filePath'] : response.data.data[0].filePath
             })
             setImage(response.data.data[0].filePath)
         }  
     }
+    // const anonymousCheck = (event) => {
+    //         setState({
+    //             ...state,
+    //             anonymous:event.target.checked
+    //         })
+    //     }
     
     useEffect(()=>{
         if(!accessToken){
@@ -112,7 +119,7 @@ const PostPage = () => {
         }
     })
 
-
+    console.log(state)
     return (
         <>
             <div>
@@ -142,12 +149,22 @@ const PostPage = () => {
                             onChange={(e)=>{
                                 setState({
                                     ...state,
-                                    content: e.target.value
+                                    content : e.target.value
                                 })
                             }}  
                         />
-                        <div style={{height:'60px'}} src = {data.fileName}>
-                          <img src={image} style={{height:'60px'}}/>  
+                        <div style={{height:'60px',  display:'flex', justifyContent:'space-between'}} src = {data.fileName}>
+                          <img src={image} style={{height:'60px'}}/> 
+                          <div style={{display:"flex",alignItems:'center', gap:'10px',marginLeft:'10px'}}>
+                                <input type={'checkbox'} 
+                                onChange={(e)=>{
+                                    setState({
+                                        ...state,
+                                        anonymous : e.target.checked,
+                                })
+                              }}/>
+                                <div style={{color:'white', fontSize:'15px'}}>익명</div>
+                            </div> 
                         </div>
                     </Wrapper>   
                 </>
@@ -171,7 +188,6 @@ const PostPage = () => {
                         }}/>
                         <STtextarea placeholder="내용을 입력하세요."
                         required
-                        maxLength={20}
                         onChange={(e)=>{
                             setState({
                                 ...state,
@@ -179,8 +195,18 @@ const PostPage = () => {
                             })
                         }}  
                         />
-                        <div style={{height:'60px'}}>
-                          <img src={image} style={{height:'60px'}}/>  
+                        <div style={{height:'60px', display:'flex', justifyContent:'space-between'}}>
+                          <img src={image} style={{height:'60px'}}/>
+                            <div style={{display:"flex",alignItems:'center', gap:'10px',marginLeft:'10px'}}>
+                                <input type={'checkbox'} 
+                                onChange={(e)=>{
+                                    setState({
+                                        ...state,
+                                        anonymous : e.target.checked,
+                                })
+                              }}/>
+                                <div style={{color:'white', fontSize:'15px'}}>익명</div>
+                            </div> 
                         </div>
                     </Wrapper>   
                 </>

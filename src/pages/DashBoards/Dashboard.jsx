@@ -80,7 +80,7 @@ const Dashboard = () => {
             </SelectHeader>
             <WrapperContainer>
                 {items.map((item,idx) =>
-                    (items.length -1 == idx 
+                    (items.length -1 == idx && items.length -1 > 12
                         ? <PostWrapper
                                 key={item.id}
                                 ref={ref}

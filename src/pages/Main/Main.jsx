@@ -26,7 +26,11 @@ const Main = () => {
             headers:{
                 Authorization:`Bearer ${accessToken}`
             }
-        })
+        }).then(
+            (window.confirm('정말로 탈퇴하시겠습니까?')&& (
+                navigate('/login')
+            ))
+        )
     }
 
     useEffect(()=>{
@@ -45,7 +49,7 @@ const Main = () => {
                         <span style={{color:'#D46655', cursor:'pointer'}}
                             onClick={onLogoutHandler}
                         >로그아웃</span>
-                        <span style={{color:'#D46655'}}
+                        <span style={{color:'#D46655', cursor:'pointer'}}
                             onClick={discardUser}>회원탈퇴</span>
                     </div>
                 </ControlHead>
