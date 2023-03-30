@@ -17,8 +17,8 @@ const PostPage = () => {
     const navigator = useNavigate();
     const dispatch = useDispatch();
     const queryClient = useQueryClient();
-    const {isopen, isEdit, boardId} = useSelector(state => state.Board)
-    const { data, isLoading, isError } = useQuery({
+    const {isEdit, boardId} = useSelector(state => state.Board)
+    const { data ,isLoading, isError} = useQuery({
         queryKey : ['getThatBoard'],
         queryFn : async() => {
             const response = await axios.get(`http://3.38.102.13/api/board/${boardId}`,{
@@ -29,20 +29,20 @@ const PostPage = () => {
             return response.data.data
         }
     }) 
-    console.log(data)
+    
     const mutation = useMutation({
         mutationFn:(newcontent)=>{
             addDashBoard(newcontent)
         }, 
         onSuccess: () => {
             queryClient.invalidateQueries('getDashBoard');
-            navigator(`/`)
+            navigator(`/${boardType}`)
         }
     })
     const accessToken = getCookie('token')
     const mutator = useMutation({
         mutationFn: async(editState) => {
-            const response = await axios.patch(`http://3.38.102.13/api/board/${boardId}`,editState,{
+            await axios.patch(`http://3.38.102.13/api/board/${boardId}`,editState,{
                 headers:{
                     Authorization:`Bearer ${accessToken}`
                 }
@@ -57,8 +57,8 @@ const PostPage = () => {
     
     
     const [state, setState] = useState({
-        title:'',
-        content:'',
+        title:data?.title,
+        content:data?.content,
         boardType: +boardType,
         fileName:'',
         filePath:'',
@@ -66,7 +66,6 @@ const PostPage = () => {
 
     const editCompleteStatus = () => {
         mutator.mutate(state)
-        
         navigator(`/${boardType}/${boardId}`)
     }
 
@@ -82,7 +81,7 @@ const PostPage = () => {
         })
         setImage('')
     }
-
+   
     const [image, setImage] = useState('')
 
     const onChangeImg = async (event)=>{
@@ -98,6 +97,8 @@ const PostPage = () => {
             })
             setState({
                 ...state,
+                title:data.title,
+                content:data.content,
                 ['fileName'] : response.data.data[0].fileName,
                 ['filePath'] : response.data.data[0].filePath
             })
@@ -111,6 +112,7 @@ const PostPage = () => {
         }
     })
 
+
     return (
         <>
             <div>
@@ -122,10 +124,11 @@ const PostPage = () => {
                             dispatch(editModeHandler())
                         }}/>
                         <span style={{marginLeft:'40px'}}>수정하기</span>
-                        <button onClick={editCompleteStatus}>수정완료</button>
+                        <Button type="submit" onClick={editCompleteStatus}>수정완료</Button>
                     </HeaderPost>
                     <Wrapper>
                         <STinput placeholder="제목"
+                        required
                         defaultValue={data.title}
                         onChange={(e)=>{
                             setState({
@@ -134,6 +137,7 @@ const PostPage = () => {
                             })
                         }}/>
                         <STtextarea placeholder="내용을 입력하세요."
+                            required
                             defaultValue={data.content}
                             onChange={(e)=>{
                                 setState({
@@ -154,10 +158,11 @@ const PostPage = () => {
                             navigator(`/${boardType}`)
                         }}/>
                         <span style={{marginLeft:'20px'}}>게시물 작성하기</span>
-                        <button onClick={PostAddHandler}>완료</button>
+                        <Button type="submit" onClick={PostAddHandler}>완료</Button>
                     </HeaderPost>
                     <Wrapper>
                         <STinput placeholder="제목"
+                        required
                         onChange={(e)=>{
                             setState({
                                 ...state,
@@ -165,12 +170,14 @@ const PostPage = () => {
                             })
                         }}/>
                         <STtextarea placeholder="내용을 입력하세요."
-                            onChange={(e)=>{
-                                setState({
-                                    ...state,
-                                    content: e.target.value
-                                })
-                            }}  
+                        required
+                        maxLength={20}
+                        onChange={(e)=>{
+                            setState({
+                                ...state,
+                                content: e.target.value
+                            })
+                        }}  
                         />
                         <div style={{height:'60px'}}>
                           <img src={image} style={{height:'60px'}}/>  
@@ -231,7 +238,7 @@ const Txtdiv = styled.div`
     color: #5C5C5E;
 ;
 `
-const Wrapper = styled.div`
+const Wrapper = styled.form`
     display: flex;
     flex-direction: column;
 `
@@ -258,4 +265,12 @@ const HeaderPost = styled.div`
     margin-bottom: 30px;
     justify-content: space-between;
     align-items: center;
+`
+const Button = styled.button`
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 6px 10px 4px 10px;
+    border: none;
+    background-color:#d24646;
 `

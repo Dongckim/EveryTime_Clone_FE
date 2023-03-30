@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { LoginUser } from "../../api/LoginSignUp";
 import Ninput from "../../core/Ninput";
@@ -56,7 +56,7 @@ const Login = () => {
                             onChangeHandler = {onChangeHandler}
                             value={value}
                             InitialData={InitialData}
-                            theme={'login'}
+                            type={value.label}
                         />
                     )
                 })}

@@ -3,7 +3,6 @@ import { AiOutlineArrowLeft } from "react-icons/ai";
 import {ImPencil2} from 'react-icons/im'
 import{FaRegThumbsUp, FaRegCommentDots} from 'react-icons/fa'
 import { useQuery } from "react-query";
-import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { getCookie } from "../../api/Cookies";
@@ -13,7 +12,6 @@ import { useCallback } from "react";
 import { useState } from "react";
 
 const Dashboard = () => {
-    const dispatch = useDispatch();
     const navigator = useNavigate();
     const { boardType } = useParams();
     const { data, isLoading, isError } = useQuery({
@@ -29,6 +27,7 @@ const Dashboard = () => {
         }
     })
     const [items, setItems] =useState([]);
+    console.log(data?.filter(item=>item.boardType == boardType).boardContent)
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(1);
     const [ref, inview] = useInView({
@@ -69,7 +68,7 @@ const Dashboard = () => {
     }
 
     return (
-        <div style={{color:'white', overflow: 'scroll', height:'750px',marginTop:'60px'}}>
+        <div style={{color:'white', overflow: 'auto',width:'380px',height:'750px',marginTop:'60px'}}>
             <SelectHeader>
                 <span style={{padding:'20px'}}
                 onClick={()=>{
@@ -146,13 +145,14 @@ const PostWrapper = styled.div`
     padding: 8px;
     border-bottom: 1px solid gray;
     margin-bottom: 10px;
-    width : 320px;
+    width : 310px;
 `
 const WrapperContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    width:375px;
+    width:370px;
+    overflow: auto;
 `
 const ButtonWriter = styled.div`
     border: 2px solid gray;

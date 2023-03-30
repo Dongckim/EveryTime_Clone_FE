@@ -40,7 +40,7 @@ const BoardContent = () => {
     })
     const mutation = useMutation({
         mutationFn: async({boardId, boardType}) => {
-            const response = await axios.delete(`http://3.38.102.13/api/board/${boardId}`,{
+            await axios.delete(`http://3.38.102.13/api/board/${boardId}`,{
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
@@ -107,8 +107,8 @@ const BoardContent = () => {
 
     const editMode = () => {
         const token = jwtDecode(getCookie('token'))
-        if(token.sub == data.userName){
-            dispatch(openHandler())
+        if(token.sub === data.userName){
+            dispatch(openHandler(true))
             dispatch(editModeHandler())
             dispatch(storeBoardId(+boardId))
             navigator(`/${boardType}/PostPage`)
@@ -128,7 +128,7 @@ const BoardContent = () => {
 
     const onChangeHandler = (event) => {
         const {name, value, checked} = event.target
-        if(name == 'anonymous'){
+        if(name === 'anonymous'){
             setInputValue({
                 ...inputValue,
                 [name]:checked
@@ -146,16 +146,14 @@ const BoardContent = () => {
         event.preventDefault();
         mutatorReply.mutate(inputValue)
         const {name} = event.target
-        if(name == 'anonymous'){
+        if(name === 'anonymous'){
             setInputValue({
             ...inputValue,
                 [name]:true
             })
         }
     }
-
-    console.log(isOpenImage)
-
+    
     return (
         <>
             <div>
@@ -163,16 +161,23 @@ const BoardContent = () => {
                     <div style={{padding : '20px'}}
                         onClick={()=>{
                             navigator(`/${data.boardType}`)
-                        }}
-                        ><AiOutlineArrowLeft/></div>
-                        <ALdiv>
-                            <span style={{fontSize:'16px', fontWeight:'600'}}>{data.typeName}</span>
-                            <span style={{fontSize:'13px', fontWeight:'900', color:'#686868'}}>13기</span>
-                        </ALdiv>
-                        <div style={{padding : '20px',fontSize:'20px',color:'#ffffff'}}
-                        onClick={onClickHandler}
-                        ><BiDotsVerticalRounded/>
+                        }}>
+                    <AiOutlineArrowLeft/>
                     </div>
+                    <ALdiv>
+                        <span style={{fontSize:'16px', fontWeight:'600'}}>{data.typeName}</span>
+                        <span style={{fontSize:'13px', fontWeight:'900', color:'#686868'}}>13기</span>
+                    </ALdiv>
+                    {data.onMine ?(
+                        <div style={{padding : '20px',fontSize:'20px',color:'#ffffff'}}
+                            onClick={onClickHandler}>
+                            <BiDotsVerticalRounded/>
+                        </div>
+                    ): (
+                    <div style={{padding : '20px',fontSize:'20px',color:'#111111'}}>
+                        <BiDotsVerticalRounded/>
+                    </div>
+                    )}
                 </Headerdiv>
                 <div>
                     <Profile/>
@@ -182,7 +187,7 @@ const BoardContent = () => {
                 <div>
                     <Title>{data.title}</Title>
                     <Body>
-                    <span style={{fontWeight:'500'}}>{data.content}</span>
+                    <span style={{fontWeight:'500', whiteSpace: 'pre-wrap'}}>{data.content}</span>
                     <div onClick={()=>{dispatch(openIamge(true))}}>
                         <img src={data.filePath} style={{height:'100px'}}/>
                     </div>
@@ -392,7 +397,7 @@ const CommWrapper = styled.div`
     left: 30px;
     width: 320px;
     height: 350px;
-    overflow: scroll;
+    overflow: auto;
 `
 const ReplyInput = styled.input`
     position: absolute;

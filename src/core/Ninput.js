@@ -1,5 +1,4 @@
-import { useState } from "react"
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 
 const Ninput = ({onChangeHandler, placeholder, label, InitialData, value}) => {
     return (
@@ -11,27 +10,27 @@ const Ninput = ({onChangeHandler, placeholder, label, InitialData, value}) => {
             <StInput 
             value={InitialData.label}
             placeholder={`${placeholder}`}
-            type={InitialData.label}
+            type={value.label}
             required
             onChange={e => onChangeHandler(e, label)}
             />
-            {(label == 'loginId')&&(
+            {(label === 'loginId')&&(
                 ((InitialData.loginId.length< 4)&&(
                  <WarnText>
                     4자 이상 입력하세요
                 </WarnText>   
                 ))
             )}
-            {(label == 'email')&&(
-                ((InitialData.email.split('').filter(item=> item == '@').join(' ')==[])&&(
+            {(label === 'email')&&(
+                ((InitialData.email.split('').filter(item=> item === '@').join(' ')===[])&&(
                     <WarnText>
                     올바른 이메일 형식을 입력해주세요
                     </WarnText>  
                 ))
             )
             }
-            {(label == 'secretKey')&&(
-                ((InitialData.secretKey == '')&&(
+            {(label === 'secretKey')&&(
+                ((InitialData.secretKey === '')&&(
                     <WarnText>
                     인증코드를 입력해주세요
                     </WarnText>  
