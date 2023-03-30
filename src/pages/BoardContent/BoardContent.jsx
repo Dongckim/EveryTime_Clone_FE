@@ -39,7 +39,7 @@ const BoardContent = () => {
         }
     })
     const mutation = useMutation({
-        mutationFn: async({boardId, boardType}) => {
+        mutationFn: async({ boardId }) => {
             await axios.delete(`http://3.38.102.13/api/board/${boardId}`,{
                 headers: {
                     Authorization: `Bearer ${accessToken}`
@@ -416,5 +416,6 @@ const CommentForm = styled.div`
     justify-content: center;
     padding: 10px 10px 10px 0px;
     border-bottom: 1px solid #ffffff;
-    height: 60px;
+    width: 300px;
+    white-space:pre-line;
 `
