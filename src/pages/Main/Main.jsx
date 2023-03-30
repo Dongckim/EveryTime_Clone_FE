@@ -27,7 +27,7 @@ const Main = () => {
                 Authorization:`Bearer ${accessToken}`
             }
         }).then(
-            (window.confirm('정말로 탈퇴하시겠습니까?')&& (
+            (window.alert('탈퇴 완료되었습니다.')&& (
                 navigate('/login')
             ))
         )
@@ -86,6 +86,7 @@ const Wrapper= styled.div`
     border: 1px solid gray;
     border-radius: 10px;
     margin-bottom: 10px;
+    overflow: hidden;
     cursor: pointer;
 `
 const ContentBox = styled.div`

@@ -186,7 +186,7 @@ const BoardContent = () => {
                 <div>
                     <Title>{data.title}</Title>
                     <Body>
-                    <span style={{fontWeight:'500', whiteSpace: 'pre-wrap'}}>{data.content}</span>
+                    <div style={{height:'120px',fontWeight:'500', whiteSpace: 'pre-wrap', overflow:'auto', overflowX:'hidden'}}>{data.content}</div>
                     <div onClick={()=>{dispatch(openIamge(true))}}>
                         <img src={data.filePath} style={{height:'100px'}}/>
                     </div>
@@ -394,7 +394,7 @@ const CommWrapper = styled.div`
     color: white;
     top: 380px;
     left: 30px;
-    width: 320px;
+    width: 330px;
     height: 350px;
     overflow: auto;
 `

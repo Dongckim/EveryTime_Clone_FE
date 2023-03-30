@@ -27,7 +27,6 @@ const Dashboard = () => {
         }
     })
     const [items, setItems] =useState([]);
-    console.log(data?.filter(item=>item.boardType == boardType).boardContent)
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(1);
     const [ref, inview] = useInView({
@@ -68,7 +67,7 @@ const Dashboard = () => {
     }
 
     return (
-        <div style={{color:'white', overflow: 'auto',width:'380px',height:'750px',marginTop:'60px'}}>
+        <div style={{color:'white', overflow: 'auto',width:'390px',height:'750px',marginTop:'60px'}}>
             <SelectHeader>
                 <span style={{padding:'20px'}}
                 onClick={()=>{
@@ -145,13 +144,13 @@ const PostWrapper = styled.div`
     padding: 8px;
     border-bottom: 1px solid gray;
     margin-bottom: 10px;
-    width : 310px;
+    width : 320px;
 `
 const WrapperContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    width:370px;
+    width:380px;
     overflow: auto;
 `
 const ButtonWriter = styled.div`

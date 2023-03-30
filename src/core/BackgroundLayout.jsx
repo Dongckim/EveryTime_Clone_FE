@@ -16,7 +16,7 @@ const Layout = styled.div`
     justify-content: center;
     align-items: center;
     height: 812px;
-    width:390px;
+    width:400px;
     background-color: #111111;
     position: fixed;
     margin-top: 20px;

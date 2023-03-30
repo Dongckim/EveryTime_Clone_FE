@@ -118,8 +118,6 @@ const PostPage = () => {
             navigator('/login')
         }
     })
-
-    console.log(state)
     return (
         <>
             <div>

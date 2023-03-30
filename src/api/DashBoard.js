@@ -8,13 +8,11 @@ const apiTok = axios.create({
 //선택게시물 조회
 // const getDashBoard = async (id) => {
 //     const response = await apiTok.get(`/api/boards?board-type=${id}`)
-//     console.log(response)
 //     return response
 // }
 
 //선택게시물에서 던져주기
 const addDashBoard = async (newContent) => {
-  console.log(newContent)
   const response = await apiTok.post(`api/board`,newContent)
   
   return response
