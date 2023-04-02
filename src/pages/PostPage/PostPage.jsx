@@ -106,12 +106,6 @@ const PostPage = () => {
             setImage(response.data.data[0].filePath)
         }  
     }
-    // const anonymousCheck = (event) => {
-    //         setState({
-    //             ...state,
-    //             anonymous:event.target.checked
-    //         })
-    //     }
     
     useEffect(()=>{
         if(!accessToken){

@@ -48,11 +48,6 @@ const data = [
 const Signup = (props) => {
     const queryClient = useQueryClient();
     const navigate = useNavigate();
-    // const { mutate, isLoading, isSuccess, isIdle } = useMutation({
-    //     mutationFn: async(newUser) => {
-    //         await axios.post('http://3.38.102.13/signup',newUser)   
-    //     }
-    // })
     
     const mutation = useMutation(SignUpUser,{
         onSuccess: () => {
